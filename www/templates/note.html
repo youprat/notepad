@@ -1,0 +1,19 @@
+<ion-view view-title="Edit Note">
+ <ion-nav-bar class="bar-calm" align-title="center">
+ <ion-nav-buttons class="button" side="right">
+		<button class="button button-light button-clear icon ion-checkmark" ng-click="closeNote()"></button>
+  </ion-nav-buttons>
+  </ion-nav-bar>
+   <ion-nav-view>
+  <ion-content>
+	<div class="list" style="width=99%;margin:0 auto;">
+		<label class="item item-input">
+			<textarea rows="1" id="noteTitleBox" placeholder="Title" style="width=100%;margin:0 auto" ng-model="$parent.titleText"></textarea>
+		</label>
+		<label class="item item-input">
+			<textarea id="noteTextBox" ng-model="$parent.noteText" style="width=99%;height:500px;margin:0 auto;" placeholder="Start typing..."></textarea>
+		</label>
+	</div>
+  </ion-content>
+   </ion-nav-view>
+</ion-view>

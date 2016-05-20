@@ -1,0 +1,18 @@
+<ion-view view-title="Notes" cache-view="false">
+ <ion-nav-bar class="bar-calm" align-title="center">
+	<ion-nav-buttons class="button" side="right">
+			<button class="button button-light button-clear icon-right ion-ios-plus-outline" ui-sref="notes.new">Add</button>
+	</ion-nav-buttons>
+  </ion-nav-bar>
+ <ion-nav-view>
+  <ion-content>
+    <ion-list can-swipe="true" >
+      <ion-item class="item-remove-animate" ng-repeat="note in notes" ui-sref="notes.single({id:note.id})">
+        <span>{{note.title}}</span>
+		<span><small>({{note.date}})</small></span>
+		<ion-option-button class="button-assertive icon ion-trash-a" ng-click="deleteNote(note)"></ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+  </ion-nav-view>
+</ion-view>
