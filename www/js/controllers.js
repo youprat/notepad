@@ -77,26 +77,55 @@ angular.module('starter.controllers', [])
 	
 	$scope.closeNote = function(){
 	
-		db.get(id).then(function(doc){
-			console.log("Updating and closing note!");
-			var note = {
-					_id: id.toString(),
-					_rev: doc._rev,
-					title: $scope.titleText,
-					text: $scope.noteText,
-					date: new Date().toISOString()
-				};
-				
-			db.put(note, function callback(err, result) {
-				if (err) {
-				  console.log("error updating! :"+err);
-				} else {
-					console.log("Updated! "+note);
+		function isBlank(str) {
+			return (!str || /^\s*$/.test(str));
+		}
+	
+	
+		function getIndex(arr, id) {
+			var key = "id";
+			for (var i = 0; i < arr.length; i++) {
+				if (arr[i][key] === id) {
+					return i;
 				}
+			}
+		}
+
+	
+		if(isBlank($scope.noteText) && isBlank($scope.titleText)) {
+				$scope.notes.splice(getIndex($scope.notes,id), 1);
+	
+				db.get(id.toString()).then(function(doc) {
+				  console.log("deleting note: "+id);
+				  return db.remove(doc);
+				}).then(function (result) {
+				  // handle result
+				}).catch(function (err) {
+				  console.log(err);
+				});
+				
+		} else {
+			db.get(id).then(function(doc){
+				console.log("Updating and closing note!");
+				var note = {
+						_id: id.toString(),
+						_rev: doc._rev,
+						title: $scope.titleText,
+						text: $scope.noteText,
+						date: new Date().toISOString()
+					};
+					
+				db.put(note, function callback(err, result) {
+					if (err) {
+					  console.log("error updating! :"+err);
+					} else {
+						console.log("Updated! "+note);
+					}
+				});
+			}).catch(function (err) {
+				console.log(err);
 			});
-		}).catch(function (err) {
-			console.log(err);
-		});
+		}
 	
 		$state.go('notes').then(function(){$state.reload();});
 	};
@@ -111,7 +140,18 @@ angular.module('starter.controllers', [])
 	console.log(info);
 	})
 	
+	function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+	}
+	
 	$scope.addNote = function(){
+		
+		if(isBlank($scope.noteText)) {
+			if(isBlank($scope.titleText)) {
+			return;
+			}
+		}
+		
 		db.allDocs({
 		}).then(function (result) {
 		   nNotes = result.total_rows;
